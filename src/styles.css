@@ -1,0 +1,130 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import 'tailwindcss';
+
+@theme {
+    --font-lexend: 'Lexend', sans-serif;
+
+    /* Brand palette — shadows, midtones, highlights, accents */
+    --color-brand-shadow: #3d1d6e;
+    --color-brand: #522793;
+    --color-brand-mid: #6b3aad;
+    --color-brand-muted: #e8dff5;
+    --color-brand-highlight: #f5f0fa;
+    --color-accent: #32bfbd;
+    --color-accent-muted: #d4f0ef;
+    --color-surface: #f1f3f4;
+    --color-surface-card: #ffffff;
+    --color-text-primary: #1a1a2e;
+    --color-text-secondary: #5f6368;
+    --color-border: #d1d1d1;
+}
+
+body {
+    @apply !box-border !m-0 !p-0 font-lexend text-text-primary;
+}
+
+/* ── Reusable layout rhythm ── */
+.app-card {
+    @apply w-full bg-surface-card rounded-2xl p-4 sm:p-6 flex flex-col gap-4 sm:gap-6 box-border;
+}
+
+.app-section-title {
+    @apply font-black font-lexend text-lg sm:text-xl text-text-primary;
+}
+
+.app-subsection-title {
+    @apply font-semibold font-lexend text-base sm:text-lg text-text-primary;
+}
+
+.app-label {
+    @apply block mb-2 font-medium text-sm sm:text-base;
+}
+
+.app-table-wrap {
+    @apply w-full overflow-x-auto -mx-1 px-1;
+}
+
+/* ── PrimeNG overrides ── */
+.p-datatable-thead {
+    tr {
+        th {
+            background-color: var(--color-brand-highlight) !important;
+            border-color: var(--color-border) !important;
+            font-size: 0.8125rem;
+            white-space: nowrap;
+        }
+    }
+}
+
+.p-datatable-tbody > tr > td {
+    border-color: var(--color-border) !important;
+    font-size: 0.875rem;
+}
+
+.p-menuitem-active .p-menubar-item-label,
+.p-menubar-item-link-active .p-menubar-item-label,
+.p-menubar-item.p-menuitem-active .p-menubar-item-label {
+    color: black !important;
+}
+
+.p-menubar-item-link-active {
+    background-color: whitesmoke !important;
+}
+
+@layer base {
+    :root {
+        --p-menubar-mobile-button-hover-background: transparent !important;
+        --p-menubar-item-focus-background: transparent !important;
+        --p-menubar-item-active-background: transparent !important;
+        --p-menubar-item-hover-background: transparent !important;
+    }
+}
+
+/* Mobile nav */
+.p-menubar {
+    @apply !block !flex !h-full !w-full !border-0 !rounded-none !bg-brand md:!hidden;
+}
+
+.p-menubar-root-list {
+    @apply !bg-brand;
+}
+
+.p-menubar-item-label {
+    @apply !text-white hover:!text-black;
+}
+
+.p-menubar-button {
+    @apply !text-white hover:!text-black;
+}
+
+/* Stepper — prevent horizontal overflow on small screens */
+.p-stepper {
+    @apply w-full;
+}
+
+.p-step-list {
+    @apply flex-wrap gap-y-2;
+}
+
+.p-step-title {
+    @apply text-xs sm:text-sm;
+}
+
+/* Checkbox rows that sit below form fields */
+.app-checkbox-row {
+    @apply flex flex-wrap items-center gap-x-3 gap-y-2 mt-2;
+}
+
+/* Button row at bottom of forms */
+.app-action-row {
+    @apply flex flex-col-reverse sm:flex-row gap-3 pt-6 sm:justify-end;
+}
+
+.app-action-row-between {
+    @apply flex flex-row flex-wrap items-center justify-between gap-3 pt-6;
+}
+
+.app-form-header {
+    @apply flex flex-wrap items-start sm:items-center justify-between gap-3;
+}

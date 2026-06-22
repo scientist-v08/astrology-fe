@@ -1,0 +1,793 @@
+<div class="app-card mt-2">
+    <div class="app-form-header">
+        <h4 class="app-section-title">Effects of the houses</h4>
+        <p-button
+            label="Reset Form"
+            severity="secondary"
+            [outlined]="true"
+            (onClick)="resetForm()"
+        />
+    </div>
+    <p-stepper [linear]="true" [value]="activeStep()" (valueChange)="onStepChange($event)">
+        <p-step-list>
+            <p-step [value]="1">Rasi Chart</p-step>
+            <p-step [value]="2">Navamsha Chart</p-step>
+        </p-step-list>
+
+        <p-step-panels>
+            <!-- Rasi Chart -->
+            <p-step-panel [value]="1">
+                <ng-template pTemplate="content" let-activateCallback="activateCallback">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div>
+                            <label
+                                class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                                for="ascendant"
+                            >
+                                Ascendant (Lagna)
+                            </label>
+                            <p-select
+                                class="w-full"
+                                id="ascendant"
+                                [options]="signs()"
+                                [ngModel]="form().rasi.ascendant"
+                                (ngModelChange)="updateRasi('ascendant', $event)"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Select sign"
+                            ></p-select>
+                            <div class="app-checkbox-row">
+                                @if (inMakaraOrDhanuFirstHalf()) {
+                                    <p-checkbox
+                                        [ngModel]="form().rasi.isFirstHalf"
+                                        (ngModelChange)="updateRasiCombust('isFirstHalf', $event)"
+                                        (keydown.enter)="
+                                            updateRasiCombust(
+                                                'isFirstHalf',
+                                                !form().rasi.isFirstHalf
+                                            )
+                                        "
+                                        binary="true"
+                                        inputId="isFirstHalf"
+                                    ></p-checkbox>
+                                    <label class="ml-2" for="isFirstHalf">Is First Half?</label>
+                                }
+                            </div>
+                        </div>
+
+                        <div>
+                            <label
+                                class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                                for="surya"
+                            >
+                                Surya (Sun)
+                            </label>
+                            <p-select
+                                class="w-full"
+                                id="surya"
+                                [options]="signs()"
+                                [ngModel]="form().rasi.surya"
+                                (ngModelChange)="updateRasi('surya', $event)"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Select sign"
+                            ></p-select>
+                        </div>
+
+                        <div>
+                            <label
+                                class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                                for="budha"
+                            >
+                                Budha (Mercury)
+                            </label>
+                            <p-select
+                                class="w-full"
+                                id="budha"
+                                [options]="signs()"
+                                [ngModel]="form().rasi.budha"
+                                (ngModelChange)="updateRasi('budha', $event)"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Select sign"
+                            ></p-select>
+                            <div class="app-checkbox-row">
+                                <p-checkbox
+                                    [ngModel]="form().rasi.budhaCombust"
+                                    (ngModelChange)="updateRasiCombust('budhaCombust', $event)"
+                                    (keydown.enter)="
+                                        updateRasiCombust('budhaCombust', !form().rasi.budhaCombust)
+                                    "
+                                    binary="true"
+                                    inputId="budhaCombust"
+                                ></p-checkbox>
+                                <label class="ml-2" for="budhaCombust">Is Combust?</label>
+                                <p-checkbox
+                                    class="ml-2"
+                                    [ngModel]="form().rasi.budhaUnafflicted"
+                                    (ngModelChange)="updateRasiCombust('budhaUnafflicted', $event)"
+                                    (keydown.enter)="
+                                        updateRasiCombust(
+                                            'budhaUnafflicted',
+                                            !form().rasi.budhaUnafflicted
+                                        )
+                                    "
+                                    binary="true"
+                                    inputId="budhaUnafflicted"
+                                ></p-checkbox>
+                                <label class="ml-2" for="budhaUnafflicted">Is Not Afflicted?</label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label
+                                class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                                for="shukra"
+                            >
+                                Shukra (Venus)
+                            </label>
+                            <p-select
+                                class="w-full"
+                                id="shukra"
+                                [options]="signs()"
+                                [ngModel]="form().rasi.shukra"
+                                (ngModelChange)="updateRasi('shukra', $event)"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Select sign"
+                            ></p-select>
+                            <div class="app-checkbox-row">
+                                <p-checkbox
+                                    [ngModel]="form().rasi.shukraCombust"
+                                    (ngModelChange)="updateRasiCombust('shukraCombust', $event)"
+                                    (keydown.enter)="
+                                        updateRasiCombust(
+                                            'shukraCombust',
+                                            !form().rasi.shukraCombust
+                                        )
+                                    "
+                                    binary="true"
+                                    inputId="shukraCombust"
+                                ></p-checkbox>
+                                <label class="ml-2" for="shukraCombust">Is Combust?</label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label
+                                class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                                for="chandra"
+                            >
+                                Chandra (Moon)
+                            </label>
+                            <p-select
+                                class="w-full"
+                                id="chandra"
+                                [options]="signs()"
+                                [ngModel]="form().rasi.chandra"
+                                (ngModelChange)="updateRasi('chandra', $event)"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Select sign"
+                            ></p-select>
+                            <div class="app-checkbox-row">
+                                <p-checkbox
+                                    [ngModel]="form().rasi.chandraWaxing"
+                                    (ngModelChange)="updateRasiCombust('chandraWaxing', $event)"
+                                    (keydown.enter)="
+                                        updateRasiCombust(
+                                            'chandraWaxing',
+                                            !form().rasi.chandraWaxing
+                                        )
+                                    "
+                                    binary="true"
+                                    inputId="chandraWaxing"
+                                ></p-checkbox>
+                                <label class="ml-2" for="chandraWaxing">Is Waxing?</label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label
+                                class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                                for="kuja"
+                            >
+                                Kuja (Mars)
+                            </label>
+                            <p-select
+                                class="w-full"
+                                id="kuja"
+                                [options]="signs()"
+                                [ngModel]="form().rasi.kuja"
+                                (ngModelChange)="updateRasi('kuja', $event)"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Select sign"
+                            ></p-select>
+                            <div class="app-checkbox-row">
+                                <p-checkbox
+                                    [ngModel]="form().rasi.kujaCombust"
+                                    (ngModelChange)="updateRasiCombust('kujaCombust', $event)"
+                                    (keydown.enter)="
+                                        updateRasiCombust('kujaCombust', !form().rasi.kujaCombust)
+                                    "
+                                    binary="true"
+                                    inputId="kujaCombust"
+                                ></p-checkbox>
+                                <label class="ml-2" for="kujaCombust">Is Combust?</label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label
+                                class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                                for="guru"
+                            >
+                                Guru (Jupiter)
+                            </label>
+                            <p-select
+                                class="w-full"
+                                id="guru"
+                                [options]="signs()"
+                                [ngModel]="form().rasi.guru"
+                                (ngModelChange)="updateRasi('guru', $event)"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Select sign"
+                            ></p-select>
+                            <div class="app-checkbox-row">
+                                <p-checkbox
+                                    [ngModel]="form().rasi.guruCombust"
+                                    (ngModelChange)="updateRasiCombust('guruCombust', $event)"
+                                    (keydown.enter)="
+                                        updateRasiCombust('guruCombust', !form().rasi.guruCombust)
+                                    "
+                                    binary="true"
+                                    inputId="guruCombust"
+                                ></p-checkbox>
+                                <label class="ml-2" for="guruCombust">Is Combust?</label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label
+                                class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                                for="shani"
+                            >
+                                Shani (Saturn)
+                            </label>
+                            <p-select
+                                class="w-full"
+                                id="shani"
+                                [options]="signs()"
+                                [ngModel]="form().rasi.shani"
+                                (ngModelChange)="updateRasi('shani', $event)"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Select sign"
+                            ></p-select>
+                            <div class="app-checkbox-row">
+                                <p-checkbox
+                                    [ngModel]="form().rasi.shaniCombust"
+                                    (ngModelChange)="updateRasiCombust('shaniCombust', $event)"
+                                    (keydown.enter)="
+                                        updateRasiCombust('shaniCombust', !form().rasi.shaniCombust)
+                                    "
+                                    binary="true"
+                                    inputId="shaniCombust"
+                                ></p-checkbox>
+                                <label class="ml-2" for="shaniCombust">Is Combust?</label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label
+                                class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                                for="rahu"
+                            >
+                                Rahu
+                            </label>
+                            <p-select
+                                class="w-full"
+                                id="rahu"
+                                [options]="signs()"
+                                [ngModel]="form().rasi.rahu"
+                                (ngModelChange)="updateRasi('rahu', $event)"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Select sign"
+                            ></p-select>
+                        </div>
+
+                        <div>
+                            <label
+                                class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                                for="ketu"
+                            >
+                                Ketu
+                            </label>
+                            <p-select
+                                class="w-full"
+                                id="ketu"
+                                [options]="signs()"
+                                [ngModel]="form().rasi.ketu"
+                                (ngModelChange)="updateRasi('ketu', $event)"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Select sign"
+                            ></p-select>
+                        </div>
+                    </div>
+
+                    <div class="app-action-row">
+                        <p-button
+                            [disabled]="rasiIsIncomplete()"
+                            (onClick)="goToNextStep(2, activateCallback)"
+                            label="Next"
+                        ></p-button>
+                    </div>
+                </ng-template>
+            </p-step-panel>
+
+            <!-- Navamsha Chart -->
+            <p-step-panel [value]="2">
+                <ng-template pTemplate="content" let-activateCallback="activateCallback">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div>
+                            <label
+                                class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                                for="ascendantNav"
+                            >
+                                Ascendant (Lagna) - D9
+                            </label>
+                            <p-select
+                                class="w-full"
+                                id="ascendantNav"
+                                [options]="signs()"
+                                [ngModel]="form().navamsha.ascendant"
+                                (ngModelChange)="updateNavamsha('ascendant', $event)"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Select sign"
+                            ></p-select>
+                        </div>
+
+                        <div>
+                            <label
+                                class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                                for="suryaNav"
+                            >
+                                Surya (Sun) - D9
+                            </label>
+                            <p-select
+                                class="w-full"
+                                id="suryaNav"
+                                [options]="signs()"
+                                [ngModel]="form().navamsha.surya"
+                                (ngModelChange)="updateNavamsha('surya', $event)"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Select sign"
+                            ></p-select>
+                        </div>
+
+                        <div>
+                            <label
+                                class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                                for="budhaNav"
+                            >
+                                Budha (Mercury) - D9
+                            </label>
+                            <p-select
+                                class="w-full"
+                                id="budhaNav"
+                                [options]="signs()"
+                                [ngModel]="form().navamsha.budha"
+                                (ngModelChange)="updateNavamsha('budha', $event)"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Select sign"
+                            ></p-select>
+                            <div class="app-checkbox-row">
+                                <p-checkbox
+                                    class="ml-2"
+                                    [ngModel]="form().navamsha.navBudhaAfflicted"
+                                    (ngModelChange)="updateNavamsha('navBudhaAfflicted', $event)"
+                                    (keydown.enter)="
+                                        updateNavamsha(
+                                            'navBudhaAfflicted',
+                                            !form().navamsha.navBudhaAfflicted
+                                        )
+                                    "
+                                    binary="true"
+                                    inputId="navBudhaAfflicted"
+                                ></p-checkbox>
+                                <label class="ml-2" for="navBudhaAfflicted">
+                                    Is Budha Afflicted In Navamsha?
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label
+                                class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                                for="shukraNav"
+                            >
+                                Shukra (Venus) - D9
+                            </label>
+                            <p-select
+                                class="w-full"
+                                id="shukraNav"
+                                [options]="signs()"
+                                [ngModel]="form().navamsha.shukra"
+                                (ngModelChange)="updateNavamsha('shukra', $event)"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Select sign"
+                            ></p-select>
+                        </div>
+
+                        <div>
+                            <label
+                                class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                                for="chandraNav"
+                            >
+                                Chandra (Moon) - D9
+                            </label>
+                            <p-select
+                                class="w-full"
+                                id="chandraNav"
+                                [options]="signs()"
+                                [ngModel]="form().navamsha.chandra"
+                                (ngModelChange)="updateNavamsha('chandra', $event)"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Select sign"
+                            ></p-select>
+                        </div>
+
+                        <div>
+                            <label
+                                class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                                for="kujaNav"
+                            >
+                                Kuja (Mars) - D9
+                            </label>
+                            <p-select
+                                class="w-full"
+                                id="kujaNav"
+                                [options]="signs()"
+                                [ngModel]="form().navamsha.kuja"
+                                (ngModelChange)="updateNavamsha('kuja', $event)"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Select sign"
+                            ></p-select>
+                        </div>
+
+                        <div>
+                            <label
+                                class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                                for="guruNav"
+                            >
+                                Guru (Jupiter) - D9
+                            </label>
+                            <p-select
+                                class="w-full"
+                                id="guruNav"
+                                [options]="signs()"
+                                [ngModel]="form().navamsha.guru"
+                                (ngModelChange)="updateNavamsha('guru', $event)"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Select sign"
+                            ></p-select>
+                        </div>
+
+                        <div>
+                            <label
+                                class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                                for="shaniNav"
+                            >
+                                Shani (Saturn) - D9
+                            </label>
+                            <p-select
+                                class="w-full"
+                                id="shaniNav"
+                                [options]="signs()"
+                                [ngModel]="form().navamsha.shani"
+                                (ngModelChange)="updateNavamsha('shani', $event)"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Select sign"
+                            ></p-select>
+                        </div>
+
+                        <div>
+                            <label
+                                class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                                for="rahuNav"
+                            >
+                                Rahu - D9
+                            </label>
+                            <p-select
+                                class="w-full"
+                                id="rahuNav"
+                                [options]="signs()"
+                                [ngModel]="form().navamsha.rahu"
+                                (ngModelChange)="updateNavamsha('rahu', $event)"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Select sign"
+                            ></p-select>
+                        </div>
+
+                        <div>
+                            <label
+                                class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                                for="ketuNav"
+                            >
+                                Ketu - D9
+                            </label>
+                            <p-select
+                                class="w-full"
+                                id="ketuNav"
+                                [options]="signs()"
+                                [ngModel]="form().navamsha.ketu"
+                                (ngModelChange)="updateNavamsha('ketu', $event)"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Select sign"
+                            ></p-select>
+                        </div>
+
+                        <div>
+                            <label
+                                class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                                for="karakamsha"
+                            >
+                                Karakamsha
+                            </label>
+                            <p-select
+                                class="w-full"
+                                id="karakamsha"
+                                [options]="signs()"
+                                [ngModel]="form().navamsha.karakamsha"
+                                (ngModelChange)="updateNavamsha('karakamsha', $event)"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Select sign"
+                            ></p-select>
+                        </div>
+                    </div>
+
+                    <div class="app-action-row-between">
+                        <p-button (onClick)="activateCallback(1)" label="Back"></p-button>
+                        <p-button
+                            [disabled]="navamshaIsIncomplete()"
+                            (onClick)="submitForm()"
+                            label="Submit"
+                        ></p-button>
+                    </div>
+                </ng-template>
+            </p-step-panel>
+        </p-step-panels>
+    </p-stepper>
+</div>
+@if (allEffects().length > 0) {
+    <div class="app-card mt-4" #effectsContainer>
+        <h4 class="app-section-title">Karakamsha Effects or Soul effects obtained</h4>
+        <div class="app-table-wrap">
+        <p-table [value]="allKarakamshaResults()" showGridlines>
+            <ng-template #header>
+                <tr>
+                    <th>Sl.No</th>
+                    <th>Effect</th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-item>
+                <tr>
+                    <td>{{ item.index + 1 }}</td>
+                    <td>{{ item.value }}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+        </div>
+    </div>
+    <div class="app-card mt-4">
+        <h4 class="app-section-title">Effects obtained</h4>
+        <div class="app-table-wrap">
+        <p-table [value]="allEffects()" showGridlines>
+            <ng-template #header>
+                <tr>
+                    <th>House Number</th>
+                    <th>Theme</th>
+                    <th>Comments</th>
+                    <th>Effects</th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-item>
+                <tr>
+                    <td>{{ item.houseNumber }}</td>
+                    <td>{{ item.theme }}</td>
+                    <td>{{ item.comments }}</td>
+                    <td>
+                        <ul class="list-disc m-2">
+                            @for (itemEffects of item.effects; track $index) {
+                                <li>{{ itemEffects }}</li>
+                            }
+                        </ul>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        </div>
+    </div>
+    <div class="app-card mt-4">
+        <h4 class="app-section-title">Themes of each house for reference</h4>
+        <ul class="list-disc m-2">
+            <li>
+                <strong>1st House :</strong>
+                Self, physical body, appearance, personality, vitality, health, temperament, overall
+                life force and beginnings.
+            </li>
+            <li>
+                <strong>2nd House :</strong>
+                Wealth, family, speech, face & mouth, food, savings, possessions, values, early
+                education, immediate relatives.
+            </li>
+            <li>
+                <strong>3rd House :</strong>
+                Siblings (especially younger), courage, communication, short travels, skills,
+                writing, hobbies, neighbors, initiative & efforts.
+            </li>
+            <li>
+                <strong>4th House :</strong>
+                Mother, home, vehicles, property, real estate, emotional security, happiness, inner
+                peace, education (foundation), chest & heart area.
+            </li>
+            <li>
+                <strong>5th House :</strong>
+                Children, creativity, intelligence, romance, love affairs, speculation, past-life
+                merits (purva punya), education (higher learning), stomach & mind.
+            </li>
+            <li>
+                <strong>6th House :</strong>
+                Enemies, debts, diseases, obstacles, daily work/routine, service, competition,
+                litigation, health issues, maternal uncles/aunts.
+            </li>
+            <li>
+                <strong>7th House :</strong>
+                Marriage, spouse, partnerships (business & personal), open enemies, sexual
+                relationships, foreign travels (short), lower back & kidneys.
+            </li>
+            <li>
+                <strong>8th House :</strong>
+                Longevity, sudden events, transformation, occult, mysteries, inheritance, unearned
+                money, chronic illness, surgery, spouse's family, genitals & anus.
+            </li>
+            <li>
+                <strong>9th House :</strong>
+                Luck/fortune, father, higher education, spirituality, religion, philosophy,
+                long-distance travel, guru/teacher, righteousness, thighs & hips.
+            </li>
+            <li>
+                <strong>10th House :</strong>
+                Career, profession, status, fame, authority, government, actions & deeds, knees,
+                public image, achievements in society.
+            </li>
+            <li>
+                <strong>11th House :</strong>
+                Gains, income, profits, elder siblings, friends & networks, aspirations, fulfillment
+                of desires, large organizations, ankles & left ear.
+            </li>
+            <li>
+                <strong>12th House :</strong>
+                Losses, expenses, isolation, foreign residence, liberation (moksha), spirituality,
+                subconscious, sleep, hospitalization, hidden enemies, feet & left eye (males)/right
+                eye (females).
+            </li>
+        </ul>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full mt-4">
+        <div class="app-card min-h-0">
+                <h4 class="app-subsection-title">House proportions</h4>
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 items-center sm:items-start">
+                    <div class="w-full sm:w-[40%] max-w-[200px] shrink-0">
+                        <p-chart [data]="data()" [options]="options()" type="doughnut" />
+                    </div>
+                    <div class="w-full sm:flex-1 flex flex-col gap-2">
+                        @for (item of color(); track $index) {
+                            <div class="flex justify-between">
+                                <div
+                                    class="flex gap-2 w-full align-center h-5 rounded-lg box-border"
+                                >
+                                    <span
+                                        class="w-4 h-4 rounded-lg"
+                                        [style]="`background: ${item}`"
+                                    ></span>
+                                    <span class="font-lexend text-black font-normal text-xs">
+                                        {{ labels()[$index] }}
+                                    </span>
+                                </div>
+                                <div class="font-lexend text-black font-normal text-xs">
+                                    {{ proportionsObtained()[$index] | number: '1.1-1' }}%
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+        </div>
+        <div class="app-card min-h-0">
+                <h4 class="app-subsection-title">What do each of the proportions mean?</h4>
+                <div class="text-xs sm:text-sm space-y-3">
+                    <div>
+                        <strong>16.7% — Maximum strength</strong>
+                        <br />
+                        Excellent and prominent results can be expected from all matters signified
+                        by this house.
+                    </div>
+
+                    <div>
+                        <strong>13.9% — Very high strength</strong>
+                        <br />
+                        Very powerful and highly favourable results are almost certain when effort
+                        is put in.
+                    </div>
+
+                    <div>
+                        <strong>11.1% — Strong position</strong>
+                        <br />
+                        Very good results are highly likely. Results obtained for effort is very
+                        good
+                    </div>
+
+                    <div>
+                        <strong>8.3% — Good strength</strong>
+                        <br />
+                        Good strength for both positive and negetive results but hard work needed
+                        more than luck.
+                    </div>
+
+                    <div>
+                        <strong>5.6% — Moderate strength</strong>
+                        <br />
+                        Moderate influence for both positive and negetive results.
+                    </div>
+
+                    <div>
+                        <strong>2.8% — Weak strength</strong>
+                        <br />
+                        Weak to below-average strength for both positive and negetive results.
+                    </div>
+
+                    <div>
+                        <strong>0% — Very weak</strong>
+                        <br />
+                        This house is very weak or non-functional for both positive and negetive
+                        results.
+                    </div>
+                </div>
+        </div>
+    </div>
+    <div class="app-card mt-4">
+        <h4 class="app-section-title">General Effects</h4>
+        <div class="app-table-wrap">
+        <p-table [value]="generalEffects()" showGridlines>
+            <ng-template #header>
+                <tr>
+                    <th>Sl.No</th>
+                    <th>Effects</th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-item let-rowIndex="rowIndex">
+                <tr>
+                    <td>{{ rowIndex + 1 }}</td>
+                    <td>{{ item }}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+        </div>
+    </div>
+}
+<p-toast position="bottom-right" key="br" />

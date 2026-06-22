@@ -1,0 +1,98 @@
+{
+    "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+    "version": 1,
+    "cli": {
+        "packageManager": "npm",
+        "analytics": "c0f3ec52-229d-4c20-945e-a242850c15d8"
+    },
+    "newProjectRoot": "projects",
+    "projects": {
+        "astrology-app": {
+            "projectType": "application",
+            "schematics": {},
+            "root": "",
+            "sourceRoot": "src",
+            "prefix": "app",
+            "architect": {
+                "build": {
+                    "builder": "@angular/build:application",
+                    "options": {
+                        "browser": "src/main.ts",
+                        "tsConfig": "tsconfig.app.json",
+                        "assets": [
+                            {
+                                "glob": "chart-line.svg",
+                                "input": "public",
+                                "output": "/assets"
+                            },
+                            {
+                                "glob": "dashboard.svg",
+                                "input": "public",
+                                "output": "/assets"
+                            },
+                            {
+                                "glob": "om.ico",
+                                "input": "public",
+                                "output": "/assets"
+                            },
+                            {
+                                "glob": "houses.svg",
+                                "input": "public",
+                                "output": "/assets"
+                            },
+                            {
+                                "glob": "user.svg",
+                                "input": "public",
+                                "output": "/assets"
+                            },
+                            {
+                                "glob": "circle-broken.svg",
+                                "input": "public",
+                                "output": "/assets"
+                            }
+                        ],
+                        "styles": ["src/styles.css"]
+                    },
+                    "configurations": {
+                        "production": {
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "500kB",
+                                    "maximumError": "1MB"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "4kB",
+                                    "maximumError": "8kB"
+                                }
+                            ],
+                            "outputHashing": "all"
+                        },
+                        "development": {
+                            "optimization": false,
+                            "extractLicenses": false,
+                            "sourceMap": true
+                        }
+                    },
+                    "defaultConfiguration": "production"
+                },
+                "serve": {
+                    "builder": "@angular/build:dev-server",
+                    "configurations": {
+                        "production": {
+                            "buildTarget": "astrology-app:build:production"
+                        },
+                        "development": {
+                            "buildTarget": "astrology-app:build:development"
+                        }
+                    },
+                    "defaultConfiguration": "development"
+                },
+                "test": {
+                    "builder": "@angular/build:unit-test"
+                }
+            }
+        }
+    }
+}

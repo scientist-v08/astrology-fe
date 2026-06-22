@@ -1,0 +1,185 @@
+<div class="app-card mt-2">
+    <div class="app-form-header">
+        <h4 class="app-section-title">Bhava Lord & Shad Bala</h4>
+        <p-button
+            label="Reset Form"
+            severity="secondary"
+            [outlined]="true"
+            (onClick)="resetForm()"
+        />
+    </div>
+
+    <p-stepper [linear]="true" [value]="activeStep()" (valueChange)="onStepChange($event)">
+        <p-step-list>
+            <p-step [value]="1">Graha Placements</p-step>
+            <p-step [value]="2">Bala Values</p-step>
+        </p-step-list>
+
+        <p-step-panels>
+            <p-step-panel [value]="1">
+                <ng-template pTemplate="content" let-activateCallback="activateCallback">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        @for (field of placementFields; track field.key) {
+                            <div>
+                                <label
+                                    class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                                >
+                                    {{ field.label }}
+                                </label>
+
+                                <p-select
+                                    class="w-full"
+                                    [options]="signs()"
+                                    [ngModel]="form().placements[field.key]"
+                                    (ngModelChange)="updatePlacement(field.key, $event)"
+                                    optionLabel="label"
+                                    optionValue="value"
+                                    placeholder="Select sign"
+                                ></p-select>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="app-action-row">
+                        <p-button
+                            [disabled]="placementsIncomplete()"
+                            (onClick)="goToNextStep(2, activateCallback)"
+                            label="Next"
+                        ></p-button>
+                    </div>
+                </ng-template>
+            </p-step-panel>
+
+            <p-step-panel [value]="2">
+                <ng-template pTemplate="content" let-activateCallback="activateCallback">
+                    @for (bala of balaFields; track bala.key) {
+                        <div class="mb-6">
+                            <h5
+                                class="app-subsection-title mb-3 after:content-['*'] after:ml-1 after:text-red-500"
+                            >
+                                {{ bala.label }}
+                            </h5>
+
+                            <div
+                                class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3"
+                            >
+                                @for (i of balaIndexes; track i) {
+                                    <label class="app-label">{{ balaOrderLabels[i] }}</label>
+                                    <input
+                                        class="w-full h-10 px-3 border border-border rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 bg-surface-card"
+                                        [ngModel]="form().balas[bala.key][i]"
+                                        (ngModelChange)="updateBala(bala.key, i, $event)"
+                                        type="number"
+                                    />
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    <div class="app-action-row-between">
+                        <p-button (onClick)="activateCallback(1)" label="Back"></p-button>
+                        <p-button
+                            [disabled]="submitIncomplete()"
+                            (onClick)="submitForm()"
+                            label="Submit"
+                        ></p-button>
+                    </div>
+                </ng-template>
+            </p-step-panel>
+        </p-step-panels>
+    </p-stepper>
+</div>
+@if (response()) {
+    <div class="app-card mt-4" #effectsContainer>
+        <h4 class="app-section-title">Bhava Lord Effects Obtained</h4>
+        <div class="app-table-wrap">
+            <p-table [value]="response()?.effects ?? []" showGridlines>
+                <ng-template #header>
+                    <tr>
+                        <th>Sl.No</th>
+                        <th>Effects</th>
+                    </tr>
+                </ng-template>
+                <ng-template #body let-item let-rowIndex="rowIndex">
+                    <tr>
+                        <td>{{ rowIndex + 1 }}</td>
+                        <td>{{ item }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <h4 class="app-section-title mt-4">Shadbala Ranks</h4>
+        <div class="text-sm text-text-secondary my-2">
+            Shadbala comments: {{ response()?.shadBalaComments }}
+        </div>
+        <div class="app-table-wrap">
+            <p-table [value]="response()?.shadRanks ?? []" showGridlines>
+                <ng-template #header>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Graha</th>
+                        <th>Effective Bala</th>
+                    </tr>
+                </ng-template>
+                <ng-template #body let-item>
+                    <tr>
+                        <td>{{ item.rank }}</td>
+                        <td>{{ item.graha }}</td>
+                        <td>{{ item.effectiveBala }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full mt-4">
+        <div class="app-card min-h-0">
+            <h4 class="app-subsection-title">Sthana Bala Ranks</h4>
+            <div class="text-sm text-text-secondary my-2">
+                Sthanabala comments: {{ response()?.top3SthanaLords }}
+            </div>
+            <div class="app-table-wrap">
+                <p-table [value]="response()?.sthanaRanks ?? []" showGridlines>
+                    <ng-template #header>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Graha</th>
+                            <th>Effective Bala</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template #body let-item>
+                        <tr>
+                            <td>{{ item.rank }}</td>
+                            <td>{{ item.graha }}</td>
+                            <td>{{ item.effectiveBala }}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+        <div class="app-card min-h-0">
+            <h4 class="app-subsection-title">Kaala Bala Ranks</h4>
+            <div class="text-sm text-text-secondary my-2">
+                Kaalabala comments: {{ response()?.top3KaalaLords }}
+            </div>
+            <div class="app-table-wrap">
+                <p-table [value]="response()?.kaalaranks ?? []" showGridlines>
+                    <ng-template #header>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Graha</th>
+                            <th>Effective Bala</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template #body let-item>
+                        <tr>
+                            <td>{{ item.rank }}</td>
+                            <td>{{ item.graha }}</td>
+                            <td>{{ item.effectiveBala }}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+}
+<p-toast position="bottom-right" key="br" />
