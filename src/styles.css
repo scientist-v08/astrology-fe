@@ -38,7 +38,7 @@ body {
 }
 
 .app-label {
-    @apply block mb-2 font-medium text-sm sm:text-base;
+    @apply mb-2 font-medium text-sm sm:text-base;
 }
 
 .app-table-wrap {

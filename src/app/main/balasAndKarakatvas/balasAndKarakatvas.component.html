@@ -54,9 +54,7 @@
                 <ng-template pTemplate="content" let-activateCallback="activateCallback">
                     @for (bala of balaFields; track bala.key) {
                         <div class="mb-6">
-                            <h5
-                                class="app-subsection-title mb-3 after:content-['*'] after:ml-1 after:text-red-500"
-                            >
+                            <h5 class="app-subsection-title mb-3">
                                 {{ bala.label }}
                             </h5>
 
@@ -64,9 +62,24 @@
                                 class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3"
                             >
                                 @for (i of balaIndexes; track i) {
-                                    <label class="app-label">{{ balaOrderLabels[i] }}</label>
+                                    <div class="hidden md:block">
+                                        <label
+                                            class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                                            >{{ balaOrderLabels[i] }}</label
+                                        >
+                                        <input
+                                            class="w-full h-10 px-3 border border-border rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 bg-surface-card"
+                                            [ngModel]="form().balas[bala.key][i]"
+                                            (ngModelChange)="updateBala(bala.key, i, $event)"
+                                            type="number"
+                                        />
+                                    </div>
+                                    <label
+                                        class="app-label block sm:hidden after:content-['*'] after:ml-1 after:text-red-500"
+                                        >{{ balaOrderLabels[i] }}</label
+                                    >
                                     <input
-                                        class="w-full h-10 px-3 border border-border rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 bg-surface-card"
+                                        class="w-full block sm:hidden h-10 px-3 border border-border rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 bg-surface-card"
                                         [ngModel]="form().balas[bala.key][i]"
                                         (ngModelChange)="updateBala(bala.key, i, $event)"
                                         type="number"
