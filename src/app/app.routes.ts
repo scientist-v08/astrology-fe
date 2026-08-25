@@ -40,6 +40,10 @@ export const routes: Routes = [
                 path: 'pairing',
                 loadComponent: () => import('./main/pairMatching/pairMatching.component'),
             },
+            {
+                path: 'conditional-dasa',
+                loadComponent: () => import('./main/conditionalDasas/conditionalDasas.component'),
+            },
         ],
         canActivate: [canActivateLoggedIn],
     },

@@ -18,6 +18,7 @@ import {
     UpagrahasNKarakamshasReqBody,
     UpagrahasNKarakamshasResponse,
 } from '../models/upagrahas.interface';
+import { ConditionalDasaInterface } from '../models/conditional-dasa.interface';
 
 @Injectable({
     providedIn: 'root',
@@ -121,5 +122,10 @@ export class ApiService {
     public calculateDoshaSamya(form: PairingReq): Observable<PairingResponse> {
         const reqUrl = this.url + 'pairing';
         return this.http.post<PairingResponse>(reqUrl, form);
+    }
+
+    public getAllApplicableDasas(form: ConditionalDasaInterface): Observable<string[]> {
+        const reqUrl = this.url + 'conditional-dasa';
+        return this.http.post<string[]>(reqUrl, form);
     }
 }

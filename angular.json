@@ -49,6 +49,11 @@
                                 "glob": "circle-broken.svg",
                                 "input": "public",
                                 "output": "/assets"
+                            },
+                            {
+                                "glob": "branch.svg",
+                                "input": "public",
+                                "output": "/assets"
                             }
                         ],
                         "styles": ["src/styles.css"]
