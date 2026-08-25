@@ -1,0 +1,164 @@
+<div class="app-card mt-2">
+    <div class="pb-2">
+        <div class="app-form-header mb-4">
+            <h3 class="app-section-title">Conditional Dasas</h3>
+            <p-button
+                label="Reset Form"
+                severity="secondary"
+                [outlined]="true"
+                (onClick)="resetForm()"
+            />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            @for (field of placementFields; track field.key) {
+                <div>
+                    <label class="app-label after:content-['*'] after:ml-1 after:text-red-500">
+                        {{ field.label }}
+                    </label>
+
+                    <p-select
+                        class="w-full"
+                        [options]="signs()"
+                        [ngModel]="vargaForm().placements[field.key]"
+                        (ngModelChange)="updateVargaPlacement(field.key, $event)"
+                        optionLabel="label"
+                        optionValue="value"
+                        placeholder="Select Rashi"
+                    ></p-select>
+                </div>
+
+                @if (field.key === 'ascendant') {
+                    <div>
+                        <label class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                            >Lagna Degree</label
+                        >
+
+                        <p-inputnumber
+                            class="w-full"
+                            [ngModel]="vargaForm().lagna.degree"
+                            (ngModelChange)="updateDegree('lagna', 'degree', $event)"
+                            [min]="0"
+                            [max]="29"
+                            [maxFractionDigits]="0"
+                            placeholder="Degree"
+                        />
+                    </div>
+
+                    <div>
+                        <label class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                            >Lagna Minute</label
+                        >
+
+                        <p-inputnumber
+                            class="w-full"
+                            [ngModel]="vargaForm().lagna.minute"
+                            (ngModelChange)="updateDegree('lagna', 'minute', $event)"
+                            [min]="0"
+                            [max]="59"
+                            [maxFractionDigits]="0"
+                            placeholder="Minute"
+                        />
+                    </div>
+                }
+
+                @if (field.key === 'chandraPlacement') {
+                    <div>
+                        <label class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                            >Chandra Degree</label
+                        >
+
+                        <p-inputnumber
+                            class="w-full"
+                            [ngModel]="vargaForm().chandra.degree"
+                            (ngModelChange)="updateDegree('chandra', 'degree', $event)"
+                            [min]="0"
+                            [max]="29"
+                            [maxFractionDigits]="0"
+                            placeholder="Degree"
+                        />
+                    </div>
+
+                    <div>
+                        <label class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                            >Chandra Minute</label
+                        >
+
+                        <p-inputnumber
+                            class="w-full"
+                            [ngModel]="vargaForm().chandra.minute"
+                            (ngModelChange)="updateDegree('chandra', 'minute', $event)"
+                            [min]="0"
+                            [max]="59"
+                            [maxFractionDigits]="0"
+                            placeholder="Minute"
+                        />
+                    </div>
+                }
+
+                @if (field.key === 'suryaPlacement') {
+                    <div>
+                        <label class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                            >Surya Degree</label
+                        >
+
+                        <p-inputnumber
+                            class="w-full"
+                            [ngModel]="vargaForm().surya.degree"
+                            (ngModelChange)="updateDegree('surya', 'degree', $event)"
+                            [min]="0"
+                            [max]="29"
+                            [maxFractionDigits]="0"
+                            placeholder="Degree"
+                        />
+                    </div>
+
+                    <div>
+                        <label class="app-label after:content-['*'] after:ml-1 after:text-red-500"
+                            >Surya Minute</label
+                        >
+
+                        <p-inputnumber
+                            class="w-full"
+                            [ngModel]="vargaForm().surya.minute"
+                            (ngModelChange)="updateDegree('surya', 'minute', $event)"
+                            [min]="0"
+                            [max]="59"
+                            [maxFractionDigits]="0"
+                            placeholder="Minute"
+                        />
+                    </div>
+                }
+            }
+        </div>
+
+        <div class="app-action-row">
+            <p-button
+                [disabled]="vargaPlacementsIncomplete()"
+                (onClick)="onSubmit()"
+                label="Submit"
+            ></p-button>
+        </div>
+    </div>
+</div>
+@if (allEffects() !== null) {
+    <div class="app-card mt-4" #effectsContainer>
+        <h4 class="app-section-title">Applicable conditional dasas</h4>
+        <div class="app-table-wrap">
+            <p-table [value]="allEffects() ?? []" showGridlines>
+                <ng-template #header>
+                    <tr>
+                        <th>Dasas</th>
+                    </tr>
+                </ng-template>
+                <ng-template #body let-item>
+                    <tr>
+                        <td>{{ item }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+}
+
+<p-toast position="bottom-right" key="br"></p-toast>

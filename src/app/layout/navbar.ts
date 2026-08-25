@@ -54,6 +54,7 @@ export class NavbarComponent {
         { label: 'Balas & Karakatavas', routerLink: '/astrology/bnk' },
         { label: 'Pair matching', routerLink: '/astrology/pairing' },
         { label: 'Upagrahas', routerLink: '/astrology/upagrahas' },
+        { label: 'Conditional dasas', routerLink: '/astrology/conditional-dasa' },
         { label: 'Logout', command: () => this.logout() },
     ]);
     logout(): void {
