@@ -52,6 +52,14 @@ import { AstroSvgComponent } from '../svg/astrosvg.component';
                 <img class="h-5 w-5 shrink-0" src="/assets/branch.svg" alt="" />
                 Conditional dasa
             </a>
+            <a
+                class="text-white no-underline text-base px-4 py-3 rounded-lg flex items-center gap-3 hover:bg-white/10 cursor-pointer transition-colors"
+                routerLink="/astrology/report"
+                routerLinkActive="bg-white/10"
+            >
+                <img class="h-5 w-5 shrink-0" src="/assets/file-pdf.svg" alt="" />
+                Report
+            </a>
         </nav>
     `,
 })
