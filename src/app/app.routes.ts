@@ -44,6 +44,10 @@ export const routes: Routes = [
                 path: 'conditional-dasa',
                 loadComponent: () => import('./main/conditionalDasas/conditionalDasas.component'),
             },
+            {
+                path: 'report',
+                loadComponent: () => import('./main/report/report.component'),
+            },
         ],
         canActivate: [canActivateLoggedIn],
     },

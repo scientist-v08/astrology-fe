@@ -62,6 +62,7 @@
                                                 <p-checkbox
                                                     [ngModel]="groomFirstHalf()"
                                                     (ngModelChange)="updateGroomHalf()"
+                                                    (keydown.enter)="updateGroomHalf()"
                                                     binary="true"
                                                     name="isFirstHalf"
                                                     inputId="isFirstHalf"
@@ -126,6 +127,7 @@
                                                 <p-checkbox
                                                     [ngModel]="brideFirstHalf()"
                                                     (ngModelChange)="updateBrideHalf()"
+                                                    (keydown.enter)="updateBrideHalf()"
                                                     binary="true"
                                                     name="isFirstHalfBride"
                                                     inputId="isFirstHalfBride"

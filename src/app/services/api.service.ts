@@ -19,6 +19,7 @@ import {
     UpagrahasNKarakamshasResponse,
 } from '../models/upagrahas.interface';
 import { ConditionalDasaInterface } from '../models/conditional-dasa.interface';
+import { ReportInterface, ReportReqInterface } from '../models/report.interface';
 
 @Injectable({
     providedIn: 'root',
@@ -127,5 +128,17 @@ export class ApiService {
     public getAllApplicableDasas(form: ConditionalDasaInterface): Observable<string[]> {
         const reqUrl = this.url + 'conditional-dasa';
         return this.http.post<string[]>(reqUrl, form);
+    }
+
+    public postToGetReport(form: ReportReqInterface): Observable<ReportInterface> {
+        const reqUrl = this.url + 'dob';
+
+        const payload: ReportReqInterface = {
+            birthDateTime: form.birthDateTime,
+            latitude: form.latitude,
+            longitude: form.longitude,
+        };
+
+        return this.http.post<ReportInterface>(reqUrl, payload);
     }
 }
