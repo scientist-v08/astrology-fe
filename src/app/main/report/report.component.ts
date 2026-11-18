@@ -26,6 +26,11 @@ import {
 import { BhavaLordAndShadBalaResBody } from '../../models/bhava-lord-effects.interface';
 import { DecimalPipe } from '@angular/common';
 
+interface ChartRow {
+    graha: string;
+    description: string;
+}
+
 @Component({
     selector: 'app-report',
     standalone: true,
@@ -126,6 +131,8 @@ export default class ReportComponent implements OnInit, OnDestroy {
 
     allEffects = signal<AllHouseEffectInterface[]>([]);
     response = signal<BhavaLordAndShadBalaResBody | null>(null);
+    d1Rows = signal<ChartRow[]>([]);
+    d9Rows = signal<ChartRow[]>([]);
     labels = signal<string[]>([
         'First house',
         'Second house',
@@ -345,6 +352,63 @@ export default class ReportComponent implements OnInit, OnDestroy {
                     this.generalEffects.set(houseResults.generalEffects);
                     this.zeroProportionHouse.set(houseResults.zeroProportion);
                     this.allKarakamshaResults.set(houseResults.karakamshaResults);
+                    const chart = houseResults.horoscope;
+                    this.d1Rows.set([
+                        { graha: 'Lagna', description: chart.ascendant },
+                        { graha: 'Surya', description: chart.suryaPlacement },
+                        {
+                            graha: 'Chandra',
+                            description: `${chart.chandraPlacement} - ${
+                                chart.chandraWaxing ? 'Shukla Paksha' : 'Krishna Paksha'
+                            }`,
+                        },
+                        {
+                            graha: 'Budha',
+                            description: `${chart.budhaPlacement?.placement ?? ''} - ${
+                                chart.budhaPlacement?.combustion ? 'Combust' : 'Not Combust'
+                            }`,
+                        },
+                        {
+                            graha: 'Shukra',
+                            description: `${chart.shukraPlacement?.placement ?? ''} - ${
+                                chart.shukraPlacement?.combustion ? 'Combust' : 'Not Combust'
+                            }`,
+                        },
+                        {
+                            graha: 'Kuja',
+                            description: `${chart.kujaPlacement?.placement ?? ''} - ${
+                                chart.kujaPlacement?.combustion ? 'Combust' : 'Not Combust'
+                            }`,
+                        },
+                        {
+                            graha: 'Guru',
+                            description: `${chart.guruPlacement?.placement ?? ''} - ${
+                                chart.guruPlacement?.combustion ? 'Combust' : 'Not Combust'
+                            }`,
+                        },
+                        {
+                            graha: 'Shani',
+                            description: `${chart.shaniPlacement?.placement ?? ''} - ${
+                                chart.shaniPlacement?.combustion ? 'Combust' : 'Not Combust'
+                            }`,
+                        },
+                        { graha: 'Rahu', description: chart.rahuPlacement },
+                        { graha: 'Ketu', description: chart.ketuPlacement },
+                    ]);
+
+                    this.d9Rows.set([
+                        { graha: 'Lagna', description: chart.nascendant },
+                        { graha: 'Surya', description: chart.nsuryaPlacement },
+                        { graha: 'Chandra', description: chart.nchandraPlacement },
+                        { graha: 'Budha', description: chart.nbudhaPlacement },
+                        { graha: 'Shukra', description: chart.nshukraPlacement },
+                        { graha: 'Kuja', description: chart.nkujaPlacement },
+                        { graha: 'Guru', description: chart.nguruPlacement },
+                        { graha: 'Shani', description: chart.nshaniPlacement },
+                        { graha: 'Rahu', description: chart.nrahuPlacement },
+                        { graha: 'Ketu', description: chart.nketuPlacement },
+                        { graha: 'Karakamsha', description: chart.karakamsha },
+                    ]);
                     this.proportionsObtained.set(houseResults.proportions);
                     this.data.set({
                         labels: this.labels(),
@@ -401,6 +465,8 @@ export default class ReportComponent implements OnInit, OnDestroy {
         this.allKarakamshaResults.set([]);
         this.data.set(undefined);
         this.options.set(undefined);
+        this.d9Rows.set([]);
+        this.d1Rows.set([]);
         this.response.set(null);
         this.days = [];
         this.selectedPlace = null;

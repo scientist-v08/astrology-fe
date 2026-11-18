@@ -187,6 +187,46 @@
 </div>
 @if (allEffects().length > 0) {
     <div class="app-card mt-4" #effectsContainer>
+        <h4 class="app-section-title">Rasi Chart: D1</h4>
+        <div class="app-table-wrap">
+            <p-table [value]="d1Rows()" showGridlines>
+                <ng-template #header>
+                    <tr>
+                        <th>Graha</th>
+                        <th>Placement / Description</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template #body let-row>
+                    <tr>
+                        <td>{{ row.graha }}</td>
+                        <td>{{ row.description }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+    <div class="app-card mt-4">
+        <h4 class="app-section-title">Navamsha: D9</h4>
+        <div class="app-table-wrap">
+            <p-table [value]="d9Rows()" showGridlines>
+                <ng-template #header>
+                    <tr>
+                        <th>Graha</th>
+                        <th>Placement / Description</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template #body let-row>
+                    <tr>
+                        <td>{{ row.graha }}</td>
+                        <td>{{ row.description }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+    <div class="app-card mt-4">
         <h4 class="app-section-title">Karakamsha Effects or Soul effects obtained</h4>
         <div class="app-table-wrap">
             <p-table [value]="allKarakamshaResults()" showGridlines>
