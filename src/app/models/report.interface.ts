@@ -1,8 +1,22 @@
-import { BhavaEffectsInterface } from './bhava-effects.interface';
+import {
+    AllHouseEffectInterface,
+    BhavaEffectsInterface,
+    BhavaEffectsReqBodyInterface,
+    KarakamshaResultsInterface,
+} from './bhava-effects.interface';
 import { BhavaLordAndShadBalaResBody } from './bhava-lord-effects.interface';
 
+export interface ReportBhavaEffectsInterface {
+    allHouseEffects: AllHouseEffectInterface[];
+    zeroProportion: number;
+    proportions: number[];
+    generalEffects: string[];
+    karakamshaResults: KarakamshaResultsInterface[];
+    horoscope: BhavaEffectsReqBodyInterface;
+}
+
 export interface ReportInterface {
-    result: BhavaEffectsInterface;
+    result: ReportBhavaEffectsInterface;
     bhavaLordsResults: BhavaLordAndShadBalaResBody;
 }
 
